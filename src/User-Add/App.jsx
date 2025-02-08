@@ -5,7 +5,9 @@ import About from './About';
 import Users from './userApp';
 function App() {
     return (
-        <Router basename='user-app-management'> 
+        <Router basename='user-app-management' future={{
+            v7_startTransition: true,
+        }}>
             <Routes >
                 <Route index path="/" element={<Home />} />
                 <Route path="/about" element={<About />} />

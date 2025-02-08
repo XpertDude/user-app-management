@@ -3,14 +3,14 @@ import appContext from "./appContext";
 import { Modal, ModalTitle, ModalHeader, ModalBody, ModalFooter } from 'react-bootstrap';
 export const UserEdit = () => {
     const context = useContext(appContext);
-    let { currentUser, setError, errors, isToEdit, handleCloseEdit } = context;
+    
+    let { currentUser, setError, errors, isToEdit, handleCloseEdit , users} = context;
     const userName = useRef();
     const userAge = useRef();
     const userCountry = useRef();
-
-    const handleError = (name, age, country) => {
+    const userType = useRef();
+    const handleError = (name, age, country, type) => {
         let newErrors = {};
-
         if (name === '') {
             newErrors.name = 'Please type your name';
         }
@@ -22,6 +22,15 @@ export const UserEdit = () => {
         }
         if (country === '') {
             newErrors.country = 'Please select your country';
+        }
+
+        const userWithTypeAdmin = users.filter(user => user.type === 'admin');
+        if (type === 'admin' && userWithTypeAdmin.length >= 3) {
+            newErrors.type = 'You can only add up to 3 admin users';
+        }
+        const userWithTypeEditor = users.filter(user => user.type === 'editor');
+        if (type === 'editor' && userWithTypeEditor.length >= 7) {
+            newErrors.type = 'You can only add up to 5 editor users';
         }
 
         setError(newErrors);
@@ -36,17 +45,19 @@ export const UserEdit = () => {
         const name = userName.current.value;
         const age = parseInt(userAge.current.value);
         const country = userCountry.current.value;
-        handleError(name, age, country)
-        if (!handleError(name, age, country)) return;
+        const type = userType.current.value;
+        handleError(name, age, country, type)
+        if (!handleError(name, age, country, type)) return;
         currentUser.name = name;
         currentUser.age = age;
         currentUser.country = country;
+        currentUser.type = type;
         handleCloseEdit()
     }
     return <>
         <Modal show={isToEdit} onHide={handleCloseEdit} centered>
             <ModalHeader closeButton>
-                <ModalTitle>Add User</ModalTitle>
+                <ModalTitle>Edit User</ModalTitle>
             </ModalHeader>
             <ModalBody>
                 <div className="mb-3 d-flex flex-column align-items-center gap-3">
@@ -69,11 +80,20 @@ export const UserEdit = () => {
                         </select>
                         {errors.country && <p className='text-danger'>{errors.country}</p>}
                     </div>
+                    <div className="mb-3 w-75">
+                            <select className="form-select form-select-lg w-100" id="type" ref={userType} defaultValue={currentUser.type}>
+                                <option value={''}>Chose type</option>
+                                <option value="admin">Admin</option>
+                                <option value="editor">Editor</option>
+                                <option value="user">User</option>
+                            </select>
+                            {errors.type && <p className='text-danger'>{errors.type}</p>}
+                        </div>
                 </div>
             </ModalBody>
             <ModalFooter>
                 <button onClick={handleCloseEdit} className="btn btn-secondary">Close</button>
-                <button className="btn btn-primary" onClick={() => handleSubmit()} type='submit'>Save</button>
+                <button className="btn btn-primary" onClick={() => handleSubmit()} type='submit'>Update</button>
             </ModalFooter>
         </Modal>
     </>

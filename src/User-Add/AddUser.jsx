@@ -6,13 +6,17 @@ export const AddUser = () => {
     const userName = useRef();
     const userAge = useRef();
     const userCountry = useRef();
-    const context = useContext(appContext)
+    const userType = useRef();
+    const context = useContext(appContext);
     const {setError, setUser, users, errors, isToAdd, handleCloseAdd} = context;
-    const handleError = (name, age, country) => {
+    const handleError = (name, age, country, type) => {
         let newErrors = {};
-    
+        const nameRegex = /^[a-zA-Z]+[0-9]*|[a-zA-Z]+[-a-zA-Z]*[0-9]*$/i;
         if (name === '') {
             newErrors.name = 'Please type your name';
+        }
+        if (!nameRegex.test(name)) {
+            newErrors.name = 'Please enter a valid name';
         }
         if (!age || isNaN(age) || age < 0 ) { 
             newErrors.age = 'Please type a valid age';
@@ -23,9 +27,19 @@ export const AddUser = () => {
         if (country === '') {
             newErrors.country = 'Please select your country';
         }
-    
+        if (type === '') {
+            newErrors.type = 'Please select user type';
+        }
+
+        const userWithTypeAdmin = users.filter(user => user.type === 'admin');
+        if (type === 'admin' && userWithTypeAdmin.length >= 3) {
+            newErrors.type = 'You can only add up to 3 admin users';
+        }
+        const userWithTypeEditor = users.filter(user => user.type === 'editor');
+        if (type === 'editor' && userWithTypeEditor.length >= 7) {
+            newErrors.type = 'You can only add up to 5 editor users';
+        }
         setError(newErrors);
-    
         const hasErrors = Object.keys(newErrors).length > 0;
     
         return !hasErrors;
@@ -36,13 +50,16 @@ export const AddUser = () => {
         const name = userName.current.value;
         const age = parseInt(userAge.current.value);
         const country = userCountry.current.value;
-        handleError(name, age, country)
-        if(!handleError(name, age, country)) return;
+        const type = userType.current.value;
+        handleError(name, age, country, type)
+        if(!handleError(name, age, country, type)) return;
         setUser([...users,               
-            {id: `${new Date().getDate()}-${new Date().getTime()}`,
+            {id: `${new Date().getMilliseconds()}-${new Date().getTime().toString().slice(0, 6)}`,
             name: name,
             age: age,
-            country: country}]);
+            country: country,
+            type: type
+        }]);
             handleCloseAdd()
     }
     return <>
@@ -70,6 +87,15 @@ export const AddUser = () => {
                                 <option value="USA">USA</option>
                             </select>
                             {errors.country && <p className='text-danger'>{errors.country}</p>}
+                        </div>
+                        <div className="mb-3 w-75">
+                            <select className="form-select form-select-lg w-100" id="type" ref={userType}>
+                                <option value={''}>Chose type</option>
+                                <option value="admin">Admin</option>
+                                <option value="editor">Editor</option>
+                                <option value="user">User</option>
+                            </select>
+                            {errors.type && <p className='text-danger'>{errors.type}</p>}
                         </div>
                     </div>
             </ModalBody>
