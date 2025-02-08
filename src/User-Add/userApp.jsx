@@ -90,7 +90,7 @@ export default function Users() {
             {showWarning && <ClearAllUsers />}
             {
                 users.length > 0 ?
-                    <section className='m-5'>
+                    <section className='m-1'>
                         <div className='d-flex align-items-center justify-content-between m-2'>
                             <div>
                                 {users.length > 0 ? <h5>Users <span className='badge bg-primary'>{users.length}</span></h5> : null}
@@ -152,7 +152,7 @@ export default function Users() {
                         </div>
                     </section>
                     :
-                    <section className='m-5'>
+                    <section className='m-1'>
                         <div className='d-flex align-items-center justify-content-between m-2'>
                             <div>
                                 {users.length > 0 ? <h5>Users <span className='badge bg-primary'>{users.length}</span></h5> : null}

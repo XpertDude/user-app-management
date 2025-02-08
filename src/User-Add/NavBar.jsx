@@ -8,8 +8,8 @@ export default function NavBar() {
 
     return <>
         {!isMobile ?
-            <div className="d-flex justify-content-around align-items-center nav-bar">
-                <Link to='/' className="fs-2 title">User App Management</Link>
+            <Navbar className="d-flex justify-content-around align-items-center nav-bar">
+                <Link to='/' className="fs-6 text-decoration-none">User App Management</Link>
                 <ul
                     className="nav justify-content-around align-items-center p-2 m-2"
                 >
@@ -23,7 +23,7 @@ export default function NavBar() {
                         <Link className="nav-link" to='/about'>About</Link>
                     </li>
                 </ul>
-            </div>
+            </Navbar>
             :
             <Navbar className="menu paths" expand="lg">
                 <Container>

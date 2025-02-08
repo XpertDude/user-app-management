@@ -1,10 +1,13 @@
-body{
-    margin: 0;
-    padding: 0;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    background-color: #EEE;
+body {
+    font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+        "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+    background-color: #eee;
 }
 
-.title{
+.title {
     text-decoration: none;
+}
+
+.nav-bar {
+    padding: 5px;
 }
